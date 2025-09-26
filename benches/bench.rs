@@ -19,23 +19,12 @@ const NUM_VERIFY_REPETITIONS: usize = 50;
 const NUM_CONSTRAINTS: usize = (1 << 20) - 100;
 const NUM_VARIABLES: usize = (1 << 20) - 100;
 
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 struct DummyCircuit<F: PrimeField> {
     pub a: Option<F>,
     pub b: Option<F>,
     pub num_variables: usize,
     pub num_constraints: usize,
-}
-
-impl<F: PrimeField> Clone for DummyCircuit<F> {
-    fn clone(&self) -> Self {
-        DummyCircuit {
-            a: self.a.clone(),
-            b: self.b.clone(),
-            num_variables: self.num_variables.clone(),
-            num_constraints: self.num_constraints.clone(),
-        }
-    }
 }
 
 impl<F: PrimeField> ConstraintSynthesizer<F> for DummyCircuit<F> {
@@ -112,7 +101,7 @@ macro_rules! groth16_verify_bench {
         let start = ark_std::time::Instant::now();
 
         for _ in 0..NUM_VERIFY_REPETITIONS {
-            let _ = Groth16::<$bench_pairing_engine>::verify(&vk, &vec![v], &proof).unwrap();
+            let _ = Groth16::<$bench_pairing_engine>::verify(&vk, &[v], &proof).unwrap();
         }
 
         println!(

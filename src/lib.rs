@@ -60,11 +60,7 @@ impl<E: Pairing, QAP: R1CSToQAP> SNARK<E::ScalarField> for Groth16<E, QAP> {
     fn circuit_specific_setup<C: ConstraintSynthesizer<E::ScalarField>, R: RngCore>(
         circuit: C,
         rng: &mut R,
-    ) -> Result<(Self::ProvingKey, Self::VerifyingKey), Self::Error>
-    where
-        C: ConstraintSynthesizer<E::ScalarField>,
-        R: RngCore,
-    {
+    ) -> Result<(Self::ProvingKey, Self::VerifyingKey), Self::Error> {
         let pk = Self::generate_random_parameters_with_reduction(circuit, rng)?;
         let vk = pk.vk.clone();
 
@@ -90,7 +86,7 @@ impl<E: Pairing, QAP: R1CSToQAP> SNARK<E::ScalarField> for Groth16<E, QAP> {
         x: &[E::ScalarField],
         proof: &Self::Proof,
     ) -> Result<bool, Self::Error> {
-        Ok(Self::verify_proof(&circuit_pvk, proof, &x)?)
+        Self::verify_proof(circuit_pvk, proof, x)
     }
 }
 

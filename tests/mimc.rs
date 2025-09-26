@@ -48,6 +48,7 @@ const MIMC_ROUNDS: usize = 322;
 fn mimc<F: Field>(mut xl: F, mut xr: F, constants: &[F]) -> F {
     assert_eq!(constants.len(), MIMC_ROUNDS);
 
+    #[allow(clippy::needless_range_loop)]
     for i in 0..MIMC_ROUNDS {
         let mut tmp1 = xl;
         tmp1.add_assign(&constants[i]);
